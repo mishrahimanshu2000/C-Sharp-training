@@ -1,9 +1,12 @@
-﻿namespace Character_Frequency
+﻿using System.Globalization;
+
+namespace Character_Frequency
 {
     internal class Program
     {
         static void Main(string[] args)
         {
+            Console.WriteLine("Enter the String");
             string s = Console.ReadLine();
             Count count = new();
             try
@@ -21,11 +24,7 @@
         }
         class Count
         {
-            int[] frequency;
-            public Count()
-            {
-                this.frequency = new int[256];
-            }
+            private Dictionary<string, int> frequency = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             public void CheckFrequency(string sentence)
             {
                 if (sentence.Length < 1)
@@ -34,20 +33,24 @@
                 }
                 for(int i=0; i < sentence.Length; i++)
                 {
-                    frequency[sentence[i]]++;
+                    if (frequency.ContainsKey(sentence[i].ToString()))
+                    {
+                        frequency[sentence[i].ToString()]++;
+                    }
+                    else
+                    {
+                        frequency[sentence[i].ToString()] = 1;
+                    }
                 }
             }
             public void ShowFrequency()
             {
                 Console.WriteLine("The Frequency of Characters are : ");
-                for(int index=0; index< 256; index++)
+                foreach (var item in frequency)
                 {
-                    if (this.frequency[index] > 0)
-                    {
-                        Console.WriteLine(Convert.ToChar(index) + " -> " + this.frequency[index]);
-                    }
+                    if (item.Key == " ") continue;
+                    Console.WriteLine(item.Key + " -> " + item.Value);
                 }
-                    
             }
            
         }
